@@ -1,6 +1,10 @@
-// ContentScript.tsx
 import cssText from "data-text:~style.css"
+import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
+
+export const config: PlasmoCSConfig = {
+  matches: ["https://juejin.cn/*"]
+}
 
 export const getStyle = () => {
   const style = document.createElement("style")
@@ -61,7 +65,7 @@ const ContentScript = () => {
           {headings.map((heading) => (
             <li
               key={heading.id}
-              className={`pl-${heading.level} mb-1 cursor-pointer ${
+              className={`pl-${heading.level} mb-1  text-lg cursor-pointer ${
                 selectedHeading === heading.id ? "font-bold" : ""
               }`}
               onClick={() => {
