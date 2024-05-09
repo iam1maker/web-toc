@@ -30,6 +30,8 @@ interface HeadingData {
 const ContentScript = () => {
   // 使用useState管理页面标题列表的状态
   const [headings, setHeadings] = useState<HeadingData[]>([])
+  const [dragging, setDragging] = useState(false)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
   // 使用useState管理当前选中标题的状态
   const [selectedHeading, setSelectedHeading] = useState<string>("")
 
@@ -72,6 +74,21 @@ const ContentScript = () => {
     // 清理函数，移除滚动事件监听器
     return () => {
       window.removeEventListener("scroll", handleScroll)
+    }
+
+    const handleMouseMove = (event) => {
+      if (dragging) {
+        setPosition({
+          x: event.clientX - 50, // 这个50是组件宽度一半，使得鼠标总在组件中间，你可以根据需要自行调整
+          y: event.clientY - 50 // 这个50是组件高度一半，使得鼠标总在组件中间，你可以根据需要自行调整
+        })
+      }
+    }
+    const handleMouseDown = () => {
+      setDragging(true)
+    }
+    const handleMouseUp = () => {
+      setDragging(false)
     }
   }, []) // useEffect的依赖数组为空，表示这个Effect只在组件挂载时执行一次
 
