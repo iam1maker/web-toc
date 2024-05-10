@@ -1,12 +1,13 @@
-// import cssText from "data-text:~style.css"
-// import type { PlasmoCSConfig } from "plasmo"
-// import React, { useEffect, useState } from "react"
+// import cssText from "data-text:~/contents/plasmo-overlay.css"
+import type { PlasmoCSConfig, PlasmoGetOverlayAnchor } from "plasmo"
+import React from "react"
 
-// import "../style.css"
+import { extractArticle, extractHeadings } from "./lib/extract"
+import { HeadingTree } from "./ui/toc"
 
-// export const config: PlasmoCSConfig = {
-//   matches: ["https://juejin.cn/*"]
-// }
+export const config: PlasmoCSConfig = {
+  matches: ["https://www.juejin.com/*"]
+}
 
 // export const getStyle = () => {
 //   const style = document.createElement("style")
@@ -14,47 +15,15 @@
 //   return style
 // }
 
-// export const ContentToc = () => {}
-
-import iconBase64 from "data-base64:~assets/icon.png"
-import cssText from "data-text:~/contents/google-sidebar.css"
-import type { PlasmoCSConfig } from "plasmo"
-import { useEffect, useState } from "react"
-
-// Inject to the webpage itself
-import "./google-sidebar-base.css"
-
-import React from "react"
-
-export const config: PlasmoCSConfig = {
-  matches: ["https://www.google.com/*"]
-}
-
-// Inject into the ShadowDOM
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
-}
-
-export const getShadowHostId = () => "plasmo-google-sidebar"
-
-const GoogleSidebar = () => {
-  const [isOpen, setIsOpen] = useState(true)
-
-  useEffect(() => {
-    document.body.classList.toggle("plasmo-google-sidebar-show", isOpen)
-  }, [isOpen])
+const TocPage = () => {
+  const article = extractArticle()
+  const headings = article && extractHeadings(article)
 
   return (
-    <div id="sidebar" className={isOpen ? "open" : "closed"}>
-      <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? "🟡 Close" : "🟣 Open"}
-      </button>
-      <img src={iconBase64} alt="Extension Icon" width={128} height={128} />
-      <p>The Easiest Way to Build, Test, and Ship browser extensions</p>
+    <div>
+      <HeadingTree headings={headings} article={article} />
     </div>
   )
 }
 
-export default GoogleSidebar
+export default TocPage
