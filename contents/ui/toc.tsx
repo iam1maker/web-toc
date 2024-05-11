@@ -1,6 +1,9 @@
 import cssText from "data-text:~style.css"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import Draggable from "react-draggable"
+import Draggable, {
+  type DraggableData,
+  type DraggableEvent
+} from "react-draggable"
 
 import type { Heading } from "../types"
 
@@ -79,6 +82,17 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   // 在HeadingTree组件中
   const headingTree = buildNestedHeadingTree(headings || [])
 
+  const [activeDrags, setActiveDrags] = useState(0)
+
+  const handleStart = () => {
+    setActiveDrags((prevActiveDrags) => prevActiveDrags + 1)
+  }
+  const handleStop = () => {
+    setActiveDrags((prevActiveDrags) => prevActiveDrags - 1)
+  }
+
+  const draggableHandlers = { onStart: handleStart, onStop: handleStop }
+
   // 定义开始拖动事件处理函数
 
   if (!article) {
@@ -86,11 +100,22 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   }
 
   return (
-    <Draggable>
+    // <Draggable>
+    //   <div className="fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
+    //     <h2 className="text-lg font-semibold mb-4">Contents</h2>
+    //     <ul className="space-y-2">{headingTree.map(renderHeadingNode)}</ul>
+    //   </div>
+    // </Draggable>
+    <Draggable handle="strong" {...draggableHandlers}>
+      {/* <div className="bg-white border border-gray-300 rounded-md w-44 h-44 m-4 p-4 float-left cursor-auto"> */}
       <div className="fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
-        <h2 className="text-lg font-semibold mb-4">Contents</h2>
+        <strong className=" cursor-move pb-1">
+          <div className=" pb-2">Drag here</div>
+        </strong>
+        {/* <h2 className="text-lg font-semibold mb-4">Contents</h2> */}
         <ul className="space-y-2">{headingTree.map(renderHeadingNode)}</ul>
       </div>
+      {/* </div> */}
     </Draggable>
   )
 }
