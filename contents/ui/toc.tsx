@@ -1,4 +1,5 @@
 import cssText from "data-text:~style.css"
+import { Minus, Plus, Sun } from "lucide-react"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import Draggable, {
   type DraggableData,
@@ -61,23 +62,19 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
     return root.children
   }
 
-  // const revealACtiveHeading = (
-
+  // const renderHeadingNode = (heading) => (
+  //   <li key={heading.id} className="mb-2">
+  //     <a
+  //       href={`#${heading.anchor}`}
+  //       onClick={() => handleHeadingClick(heading)}
+  //       className="text-gray-600 hover:text-blue-500">
+  //       {heading.text}
+  //     </a>
+  //     {heading.children.length > 0 && (
+  //       <ul className="ml-4">{heading.children.map(renderHeadingNode)}</ul>
+  //     )}
+  //   </li>
   // )
-
-  const renderHeadingNode = (heading) => (
-    <li key={heading.id} className="mb-2">
-      <a
-        href={`#${heading.anchor}`}
-        onClick={() => handleHeadingClick(heading)}
-        className="text-gray-600 hover:text-blue-500">
-        {heading.text}
-      </a>
-      {heading.children.length > 0 && (
-        <ul className="ml-4">{heading.children.map(renderHeadingNode)}</ul>
-      )}
-    </li>
-  )
 
   // 在HeadingTree组件中
   const headingTree = buildNestedHeadingTree(headings || [])
@@ -93,29 +90,50 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
 
   const draggableHandlers = { onStart: handleStart, onStop: handleStop }
 
-  // 定义开始拖动事件处理函数
-
   if (!article) {
     return <div>No article found</div>
   }
 
   return (
-    // <Draggable>
-    //   <div className="fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
-    //     <h2 className="text-lg font-semibold mb-4">Contents</h2>
-    //     <ul className="space-y-2">{headingTree.map(renderHeadingNode)}</ul>
-    //   </div>
-    // </Draggable>
     <Draggable handle="strong" {...draggableHandlers}>
-      {/* <div className="bg-white border border-gray-300 rounded-md w-44 h-44 m-4 p-4 float-left cursor-auto"> */}
-      <div className="fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
-        <strong className=" cursor-move pb-1">
-          <div className=" pb-2">Drag here</div>
+      <div className="group fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
+        <strong className="cursor-move pb-1">
+          <div>Toc</div>
         </strong>
-        {/* <h2 className="text-lg font-semibold mb-4">Contents</h2> */}
-        <ul className="space-y-2">{headingTree.map(renderHeadingNode)}</ul>
+        <div className="pb-2 hidden group-hover:flex flex items-center justify-end">
+          <Plus className="mx-1 h-4 w-4" />
+          <Minus className="mx-1 h-4 w-4" />
+          <Sun className="mx-1 h-4 w-4" />
+        </div>
+        <ul className="space-y-2">
+          {headingTree.map((node) => (
+            <li key={node.id} className="mb-2">
+              <a
+                href={`#${node.anchor}`}
+                onClick={() => handleHeadingClick(node)}
+                className="text-gray-600 hover:text-blue-500">
+                {node.text}
+              </a>
+              {node.children.length > 0 && (
+                <ul className="ml-4">
+                  {node.children.map((child) => (
+                    <li key={child.id} className="mb-2">
+                      <a
+                        href={`#${child.anchor}`}
+                        onClick={() => handleHeadingClick(child)}
+                        className="text-gray-600 hover:text-blue-500">
+                        {child.text}
+                      </a>
+                      {/* 继续递归，如果有更深层的子标题 */}
+                      {/* ...可以在这里继续递归渲染 */}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
-      {/* </div> */}
     </Draggable>
   )
 }
