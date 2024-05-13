@@ -1,5 +1,5 @@
 import cssText from "data-text:~style.css"
-import { Minus, Plus, Sun } from "lucide-react"
+import { Ellipsis, Minus, Plus, SunDim } from "lucide-react"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import Draggable, {
   type DraggableData,
@@ -62,20 +62,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
     return root.children
   }
 
-  // const renderHeadingNode = (heading) => (
-  //   <li key={heading.id} className="mb-2">
-  //     <a
-  //       href={`#${heading.anchor}`}
-  //       onClick={() => handleHeadingClick(heading)}
-  //       className="text-gray-600 hover:text-blue-500">
-  //       {heading.text}
-  //     </a>
-  //     {heading.children.length > 0 && (
-  //       <ul className="ml-4">{heading.children.map(renderHeadingNode)}</ul>
-  //     )}
-  //   </li>
-  // )
-
   // 在HeadingTree组件中
   const headingTree = buildNestedHeadingTree(headings || [])
 
@@ -103,7 +89,8 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
         <div className="pb-2 hidden group-hover:flex flex items-center justify-end">
           <Plus className="mx-1 h-4 w-4" />
           <Minus className="mx-1 h-4 w-4" />
-          <Sun className="mx-1 h-4 w-4" />
+          <SunDim className="mx-1 h-4 w-4" />
+          <Ellipsis className=" mx-1 h-4 w-4" />
         </div>
         <ul className="space-y-2">
           {headingTree.map((node) => (
