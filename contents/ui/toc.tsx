@@ -29,7 +29,9 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   article
 }) => {
   const handleHeadingClick = (heading: Heading) => {
+    // event.preventDefault()
     const targetElement = article?.querySelector(`#${heading.anchor}`)
+    console.log(targetElement)
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: "smooth" })
     }
@@ -97,7 +99,10 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
             <li key={node.id} className="mb-2">
               <a
                 href={`#${node.anchor}`}
-                onClick={() => handleHeadingClick(node)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleHeadingClick(node)
+                }}
                 className="text-gray-600 hover:text-blue-500">
                 {node.text}
               </a>
@@ -107,7 +112,10 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                     <li key={child.id} className="mb-2">
                       <a
                         href={`#${child.anchor}`}
-                        onClick={() => handleHeadingClick(child)}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleHeadingClick(child)
+                        }}
                         className="text-gray-600 hover:text-blue-500">
                         {child.text}
                       </a>

@@ -289,6 +289,7 @@ export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
     .map((tag): HeadingGroup => {
       // 将指定标签的所有DOM元素转换为数组
       let elems = toArray(articleDom.getElementsByTagName(tag)) as HTMLElement[]
+      console.log("articleDom", articleDom)
       // 对<strong>标签进行特殊处理，只保留左对齐的元素作为标题
       if (tag.toLowerCase() === "strong") {
         const commonLeft = getElemsCommonLeft(elems) // 计算所有元素的共同左边缘
@@ -366,6 +367,7 @@ export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
     const dom = treeWalker.currentNode as HTMLElement
 
     // 尝试获取节点的id，如果不存在，则从其内部的<a>元素中尝试提取id或href作为锚点。
+    console.log("dom.id:", dom.id)
     const anchor =
       dom.id ||
       toArray(dom.querySelectorAll("a"))

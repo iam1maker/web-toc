@@ -8,7 +8,7 @@ import { extractArticle, extractHeadings } from "./lib/extract"
 import { HeadingTree } from "./ui/toc"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://juejin.cn/*"]
+  matches: ["https://sspai.com/*"]
 }
 
 export const getStyle = () => {
