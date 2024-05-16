@@ -10,6 +10,7 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.6.2",
     "lucide-react": "^0.378.0",
     "plasmo": "0.86.2",
     "react": "18.2.0",

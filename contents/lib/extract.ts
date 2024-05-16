@@ -1,5 +1,3 @@
-// import { isDebugging } from '../util/env'
-// import { draw } from '../util/debug'
 import { type Heading } from "../types"
 import { toArray } from "../util/dom/to_array"
 import { canScroll } from "./scroll"
@@ -121,7 +119,6 @@ export const extractArticle = function (): HTMLElement | undefined {
      * @returns 筛选后的HTMLElement数组。
      */
     let elems = toArray(document.querySelectorAll(selector)) as HTMLElement[]
-
     // 如果选择器为'strong'，对元素进行进一步的筛选
     if (selector.toLowerCase() === "strong") {
       // 计算这些<strong>元素在左侧的共同偏移量
@@ -172,32 +169,6 @@ export const extractArticle = function (): HTMLElement | undefined {
       return { elem, score }
     })
 
-  /**
-   * 调整候选元素的得分，基于它们在页面中的视觉重要性和内容质量。
-   * 具体调整策略包括：排除过窄的元素，并且对于可以滚动的元素降低得分。
-   *
-   * @param candicates 候选元素列表，每个候选元素包含一个HTMLElement和一个得分。
-   */
-  const adjustCandidateScores = () => {
-    // 排除侧边栏等过窄元素，将它们的得分设置为0，并调整其父元素的得分
-    const isTooNarrow = (e: HTMLElement) => e.scrollWidth < 400
-    candicates.forEach((candicate) => {
-      if (isTooNarrow(candicate.elem)) {
-        candicate.score = 0
-        // 对包含当前元素的父元素降低得分
-        candicates.forEach((parent) => {
-          if (parent.elem.contains(candicate.elem)) {
-            parent.score *= 0.7
-          }
-        })
-      }
-      // 如果元素可以滚动且不是文档主体，则降低其得分
-      if (canScroll(candicate.elem) && candicate.elem !== document.body) {
-        candicate.score *= 0.5
-      }
-    })
-  }
-
   // 根据元素的高度、链接数量和宽度等因素，重新计算候选元素的得分
   const reweighted = candicates
     .map(({ elem, score }) => {
@@ -213,21 +184,9 @@ export const extractArticle = function (): HTMLElement | undefined {
     })
     .sort((a, b) => b.score - a.score)
 
-  // 如果处于调试模式，输出各个阶段的结果
-  // if (isDebugging) {
-  //   console.log('[extract]', {
-  //     elemScores,
-  //     sortedByScore,
-  //     candicates,
-  //     reweighted,
-  //   })
-  // }
-
   // 选择得分最高的元素作为文章内容，如果没有则返回undefined
   const article = reweighted.length ? reweighted[0].elem : undefined
-  // if (isDebugging) {
-  //   draw(article, 'red') // 在调试模式下用红色标记选中的元素
-  // }
+
   return article
 }
 
@@ -261,6 +220,7 @@ const HEADING_TAG_WEIGHTS = {
  * @returns Heading[] 返回一个包含标题信息的数组，每个标题包括DOM元素、文本内容、级别、唯一ID和锚点。
  */
 export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
+  console.log("articleDom", articleDom)
   // 定义可见性的判断函数
   const isVisible = (elem: HTMLElement) => elem.offsetHeight !== 0
 
@@ -289,7 +249,6 @@ export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
     .map((tag): HeadingGroup => {
       // 将指定标签的所有DOM元素转换为数组
       let elems = toArray(articleDom.getElementsByTagName(tag)) as HTMLElement[]
-      console.log("articleDom", articleDom)
       // 对<strong>标签进行特殊处理，只保留左对齐的元素作为标题
       if (tag.toLowerCase() === "strong") {
         const commonLeft = getElemsCommonLeft(elems) // 计算所有元素的共同左边缘
@@ -368,8 +327,11 @@ export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
 
     // 尝试获取节点的id，如果不存在，则从其内部的<a>元素中尝试提取id或href作为锚点。
     console.log("dom.id:", dom.id)
+
     const anchor =
+      //如何获取data-id=""的元素
       dom.id ||
+      dom.getAttribute(`data-id`) ||
       toArray(dom.querySelectorAll("a"))
         .map((a) => {
           let href = a.getAttribute("href") || ""
@@ -389,11 +351,5 @@ export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
     id++ // 更新id，为下一个标题元素准备。
   }
 
-  // 若处于调试模式，通过画布绘制选中的元素（用于可视化验证）
-  // if (isDebugging) {
-  //   if (headingTagGroups.length > 0) draw(headingTagGroups[0].elems, 'blue')
-  //   if (headingTagGroups.length > 1) draw(headingTagGroups[1].elems, 'green')
-  //   if (headingTagGroups.length > 2) draw(headingTagGroups[2].elems, 'yellow')
-  // }
   return headings
 }

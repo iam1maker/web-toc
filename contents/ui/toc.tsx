@@ -1,6 +1,7 @@
+import { hrtime } from "process"
 import cssText from "data-text:~style.css"
 import { Ellipsis, Minus, Plus, SunDim } from "lucide-react"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useState } from "react"
 import Draggable, {
   type DraggableData,
   type DraggableEvent
@@ -11,6 +12,7 @@ import type { Heading } from "../types"
 interface HeadingTreeProps {
   headings: Heading[] | undefined
   article?: HTMLElement
+  loading: boolean
 }
 
 // 扩展Heading类型来包含children
@@ -26,12 +28,17 @@ export const getStyle = () => {
 
 export const HeadingTree: React.FC<HeadingTreeProps> = ({
   headings,
-  article
+  article,
+  loading
 }) => {
   const handleHeadingClick = (heading: Heading) => {
     // event.preventDefault()
+    console.log("heading", heading.anchor)
+
     const targetElement = article?.querySelector(`#${heading.anchor}`)
-    console.log(targetElement)
+
+    console.log("targetElement:", targetElement)
+
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: "smooth" })
     }
@@ -83,52 +90,58 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   }
 
   return (
-    <Draggable handle="strong" {...draggableHandlers}>
-      <div className="group fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
-        <strong className="cursor-move pb-1">
-          <div>Toc</div>
-        </strong>
-        <div className="pb-2 hidden group-hover:flex flex items-center justify-end">
-          <Plus className="mx-1 h-4 w-4" />
-          <Minus className="mx-1 h-4 w-4" />
-          <SunDim className="mx-1 h-4 w-4" />
-          <Ellipsis className=" mx-1 h-4 w-4" />
-        </div>
-        <ul className="space-y-2">
-          {headingTree.map((node) => (
-            <li key={node.id} className="mb-2">
-              <a
-                href={`#${node.anchor}`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleHeadingClick(node)
-                }}
-                className="text-gray-600 hover:text-blue-500">
-                {node.text}
-              </a>
-              {node.children.length > 0 && (
-                <ul className="ml-4">
-                  {node.children.map((child) => (
-                    <li key={child.id} className="mb-2">
-                      <a
-                        href={`#${child.anchor}`}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleHeadingClick(child)
-                        }}
-                        className="text-gray-600 hover:text-blue-500">
-                        {child.text}
-                      </a>
-                      {/* 继续递归，如果有更深层的子标题 */}
-                      {/* ...可以在这里继续递归渲染 */}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Draggable>
+    <>
+      {loading ? (
+        <div className="text-center mx-auto">loading...</div>
+      ) : (
+        <Draggable handle="strong" {...draggableHandlers}>
+          <div className="group fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
+            <strong className="cursor-move pb-1">
+              <div>Toc</div>
+            </strong>
+            <div className="pb-2 hidden group-hover:flex flex items-center justify-end">
+              <Plus className="mx-1 h-4 w-4" />
+              <Minus className="mx-1 h-4 w-4" />
+              <SunDim className="mx-1 h-4 w-4" />
+              <Ellipsis className=" mx-1 h-4 w-4" />
+            </div>
+            <ul className="space-y-2">
+              {headingTree.map((node) => (
+                <li key={node.id} className="mb-2">
+                  <a
+                    href={`#${node.anchor}`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      handleHeadingClick(node)
+                    }}
+                    className="text-gray-600 hover:text-blue-500">
+                    {node.text}
+                  </a>
+                  {node.children.length > 0 && (
+                    <ul className="ml-4">
+                      {node.children.map((child) => (
+                        <li key={child.id} className="mb-2">
+                          <a
+                            href={`#${node.anchor}`}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              handleHeadingClick(child)
+                            }}
+                            className="text-gray-600 hover:text-blue-500">
+                            {child.text}
+                          </a>
+                          {/* 继续递归，如果有更深层的子标题 */}
+                          {/* ...可以在这里继续递归渲染 */}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Draggable>
+      )}
+    </>
   )
 }
