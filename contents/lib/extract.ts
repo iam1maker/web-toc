@@ -329,9 +329,8 @@ export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
     console.log("dom.id:", dom.id)
 
     const anchor =
-      //如何获取data-id=""的元素
+      // todo 如何获取data-id=""的元素 dom.getAttribute(`data-id`)
       dom.id ||
-      dom.getAttribute(`data-id`) ||
       toArray(dom.querySelectorAll("a"))
         .map((a) => {
           let href = a.getAttribute("href") || ""

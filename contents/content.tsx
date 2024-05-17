@@ -34,10 +34,10 @@ const TocPage = () => {
         const headings = result && extractHeadings(result)
         setArticle(result)
         setHeadings(headings)
+        console.log("headings:", headings)
+
         // 执行其他逻辑...
       }, 1000) // 延迟500毫秒
-
-      console.log("headings:", headings)
     }
     setLoading(false)
   })

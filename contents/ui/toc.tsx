@@ -31,13 +31,17 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   article,
   loading
 }) => {
-  const handleHeadingClick = (heading: Heading) => {
-    // event.preventDefault()
-    console.log("heading", heading.anchor)
+  const handleHeadingClick = (heading: Heading, href: string) => {
+    let targetElement = article?.querySelector(`#${heading.anchor}`)
 
-    const targetElement = article?.querySelector(`#${heading.anchor}`)
-
-    console.log("targetElement:", targetElement)
+    if (!targetElement && heading.text) {
+      const elements = article?.querySelectorAll(heading.dom.localName)
+      elements.forEach((e) => {
+        if (e.textContent?.trim() === heading.text.trim()) {
+          targetElement = e
+        }
+      })
+    }
 
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: "smooth" })
@@ -109,10 +113,11 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
               {headingTree.map((node) => (
                 <li key={node.id} className="mb-2">
                   <a
-                    href={`#${node.anchor}`}
+                    href={`#${node.anchor ? node.anchor : ":~:text=" + node.text}`}
                     onClick={(e) => {
+                      const href = e.currentTarget.href
                       e.preventDefault()
-                      handleHeadingClick(node)
+                      handleHeadingClick(node, href)
                     }}
                     className="text-gray-600 hover:text-blue-500">
                     {node.text}
@@ -122,10 +127,11 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                       {node.children.map((child) => (
                         <li key={child.id} className="mb-2">
                           <a
-                            href={`#${node.anchor}`}
+                            href={`#${child.anchor ? child.anchor : ":~:text=" + child.text}`}
                             onClick={(e) => {
+                              const href = e.currentTarget.href
                               e.preventDefault()
-                              handleHeadingClick(child)
+                              handleHeadingClick(child, href)
                             }}
                             className="text-gray-600 hover:text-blue-500">
                             {child.text}
