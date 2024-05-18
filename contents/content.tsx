@@ -11,8 +11,9 @@ import { HeadingTree } from "./ui/toc"
 
 export const config: PlasmoCSConfig = {
   // matches: ["https://sspai.com/*"]
-  matches: ["https://juejin.cn/*"]
   // matches: ["https://juejin.cn/*"]
+  matches: ["https://juejin.cn/*"]
+  // matches: ["https://stackoverflow.com/*"]
 }
 
 export const getStyle = () => {

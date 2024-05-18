@@ -79,6 +79,9 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   const headingTree = buildNestedHeadingTree(headings || [])
 
   const [activeDrags, setActiveDrags] = useState(0)
+  const [collapsedNodes, setCollapsedNodes] = useState<{
+    [key: number]: boolean
+  }>({})
 
   const handleStart = () => {
     setActiveDrags((prevActiveDrags) => prevActiveDrags + 1)
@@ -88,6 +91,32 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   }
 
   const draggableHandlers = { onStart: handleStart, onStop: handleStop }
+
+  const toggleCollapse = (id: number) => {
+    setCollapsedNodes((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }))
+  }
+
+  const collapseAll = () => {
+    const newCollapsedNodes = {}
+    headingTree.forEach((node) => {
+      newCollapsedNodes[node.id] = true
+      node.children.forEach((child) => {
+        newCollapsedNodes[child.id] = true
+      })
+    })
+  }
+  const expandAll = () => {
+    const newCollapsedNodes = {}
+    headingTree.forEach((node) => {
+      newCollapsedNodes[node.id] = false
+      node.children.forEach((child) => {
+        newCollapsedNodes[child.id] = false
+      })
+    })
+  }
 
   if (!article) {
     return <div>No article found</div>
@@ -103,41 +132,70 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
             <strong className="cursor-move pb-1">
               <div>Toc</div>
             </strong>
-            <div className="pb-2 hidden group-hover:flex flex items-center justify-end">
-              <Plus className="mx-1 h-4 w-4" />
-              <Minus className="mx-1 h-4 w-4" />
+            <div className="pb-2 flex items-center justify-end">
+              <button onClick={expandAll} className="mx-1 h-4 w-4">
+                <Plus className="mx-1 h-4 w-4" />
+              </button>
+              <button onClick={collapseAll} className="mx-1 h-4 w-4">
+                <Minus className="mx-1 h-4 w-4" />
+              </button>
+
               <SunDim className="mx-1 h-4 w-4" />
               <Ellipsis className=" mx-1 h-4 w-4" />
             </div>
-            <ul className="space-y-2">
+            <ul className="space-y-2 ml-2">
               {headingTree.map((node) => (
-                <li key={node.id} className="mb-2">
-                  <a
-                    href={`#${node.anchor ? node.anchor : ":~:text=" + node.text}`}
-                    onClick={(e) => {
-                      const href = e.currentTarget.href
-                      e.preventDefault()
-                      handleHeadingClick(node, href)
-                    }}
-                    className="text-gray-600 hover:text-blue-500">
-                    {node.text}
-                  </a>
-                  {node.children.length > 0 && (
-                    <ul className="ml-4">
+                <li key={node.id} className="mb-2 group">
+                  <div className=" flex items-center">
+                    {node.children.length > 0 && (
+                      <button
+                        onClick={() => toggleCollapse(node.id)}
+                        className=" mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {collapsedNodes[node.id] ? (
+                          <Plus size={12} />
+                        ) : (
+                          <Minus size={12} />
+                        )}
+                      </button>
+                    )}
+                    <a
+                      href={`#${node.anchor ? node.anchor : ":~:text=" + node.text}`}
+                      onClick={(e) => {
+                        const href = e.currentTarget.href
+                        e.preventDefault()
+                        handleHeadingClick(node, href)
+                      }}
+                      className="text-gray-600 hover:text-blue-500">
+                      {node.text}
+                    </a>
+                  </div>
+                  {node.children.length > 0 && !collapsedNodes[node.id] && (
+                    <ul className="ml-9">
                       {node.children.map((child) => (
-                        <li key={child.id} className="mb-2">
-                          <a
-                            href={`#${child.anchor ? child.anchor : ":~:text=" + child.text}`}
-                            onClick={(e) => {
-                              const href = e.currentTarget.href
-                              e.preventDefault()
-                              handleHeadingClick(child, href)
-                            }}
-                            className="text-gray-600 hover:text-blue-500">
-                            {child.text}
-                          </a>
-                          {/* 继续递归，如果有更深层的子标题 */}
-                          {/* ...可以在这里继续递归渲染 */}
+                        <li key={child.id} className="mb-2 group">
+                          <div>
+                            {child.children.length > 0 && (
+                              <button
+                                onClick={() => toggleCollapse(child.id)}
+                                className=" mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {collapsedNodes[child.id] ? (
+                                  <Plus size={12} />
+                                ) : (
+                                  <Minus size={12} />
+                                )}
+                              </button>
+                            )}
+                            <a
+                              href={`#${child.anchor ? child.anchor : ":~:text=" + child.text}`}
+                              onClick={(e) => {
+                                const href = e.currentTarget.href
+                                e.preventDefault()
+                                handleHeadingClick(child, href)
+                              }}
+                              className="text-gray-600 hover:text-blue-500">
+                              {child.text}
+                            </a>
+                          </div>
                         </li>
                       ))}
                     </ul>
