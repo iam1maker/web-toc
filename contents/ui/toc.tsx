@@ -107,6 +107,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
         newCollapsedNodes[child.id] = true
       })
     })
+    setCollapsedNodes(newCollapsedNodes)
   }
   const expandAll = () => {
     const newCollapsedNodes = {}
@@ -116,6 +117,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
         newCollapsedNodes[child.id] = false
       })
     })
+    setCollapsedNodes(newCollapsedNodes)
   }
 
   if (!article) {
@@ -147,17 +149,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
               {headingTree.map((node) => (
                 <li key={node.id} className="mb-2 group">
                   <div className=" flex items-center">
-                    {node.children.length > 0 && (
-                      <button
-                        onClick={() => toggleCollapse(node.id)}
-                        className=" mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {collapsedNodes[node.id] ? (
-                          <Plus size={12} />
-                        ) : (
-                          <Minus size={12} />
-                        )}
-                      </button>
-                    )}
                     <a
                       href={`#${node.anchor ? node.anchor : ":~:text=" + node.text}`}
                       onClick={(e) => {
@@ -165,26 +156,26 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                         e.preventDefault()
                         handleHeadingClick(node, href)
                       }}
-                      className="text-gray-600 hover:text-blue-500">
+                      className="text-gray-600 hover:text-blue-500 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
                       {node.text}
                     </a>
+                    {node.children.length > 0 && (
+                      <button
+                        onClick={() => toggleCollapse(node.id)}
+                        className=" ml-auto mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {collapsedNodes[node.id] ? (
+                          <Plus size={12} />
+                        ) : (
+                          <Minus size={12} />
+                        )}
+                      </button>
+                    )}
                   </div>
                   {node.children.length > 0 && !collapsedNodes[node.id] && (
                     <ul className="ml-9">
                       {node.children.map((child) => (
                         <li key={child.id} className="mb-2 group">
-                          <div>
-                            {child.children.length > 0 && (
-                              <button
-                                onClick={() => toggleCollapse(child.id)}
-                                className=" mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {collapsedNodes[child.id] ? (
-                                  <Plus size={12} />
-                                ) : (
-                                  <Minus size={12} />
-                                )}
-                              </button>
-                            )}
+                          <div className=" flex items-center">
                             <a
                               href={`#${child.anchor ? child.anchor : ":~:text=" + child.text}`}
                               onClick={(e) => {
@@ -192,9 +183,20 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                                 e.preventDefault()
                                 handleHeadingClick(child, href)
                               }}
-                              className="text-gray-600 hover:text-blue-500">
+                              className="text-gray-600 hover:text-blue-500 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
                               {child.text}
                             </a>
+                            {child.children.length > 0 && (
+                              <button
+                                onClick={() => toggleCollapse(child.id)}
+                                className=" ml-auto mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {collapsedNodes[child.id] ? (
+                                  <Plus size={12} />
+                                ) : (
+                                  <Minus size={12} />
+                                )}
+                              </button>
+                            )}
                           </div>
                         </li>
                       ))}
