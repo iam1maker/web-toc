@@ -79,9 +79,29 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   const headingTree = buildNestedHeadingTree(headings || [])
 
   const [activeDrags, setActiveDrags] = useState(0)
+
+  /**
+   * 使用状态管理器useState初始化一个记录折叠节点的对象。
+   * 初始时，对象为空，没有任何节点被标记为折叠或非折叠状态。
+   * @type {Object} 一个键为节点ID，值为布尔值的对象。布尔值表示节点是否被折叠。
+   */
   const [collapsedNodes, setCollapsedNodes] = useState<{
     [key: number]: boolean
   }>({})
+
+  /**
+   * 切换指定节点的折叠状态。
+   * 如果节点当前是折叠的，则将其设置为非折叠状态；反之亦然。
+   * @param {number} id - 要切换折叠状态的节点的ID。
+   */
+  const toggleCollapse = (id: number) => {
+    // 使用setCollapsedNodes更新collapsedNodes对象，
+    // 对象的[id]属性值取反，以实现折叠状态的切换。
+    setCollapsedNodes((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }))
+  }
 
   const handleStart = () => {
     setActiveDrags((prevActiveDrags) => prevActiveDrags + 1)
@@ -92,23 +112,26 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
 
   const draggableHandlers = { onStart: handleStart, onStop: handleStop }
 
-  const toggleCollapse = (id: number) => {
-    setCollapsedNodes((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id]
-    }))
-  }
-
+  /**
+   * 折叠所有标题节点。
+   * 该函数遍历 `headingTree`，为每个节点及其子节点设置折叠状态。
+   * 不接受参数，也不返回值。
+   */
   const collapseAll = () => {
+    // 初始化一个新的对象来存储所有被折叠的节点
     const newCollapsedNodes = {}
+    // 遍历所有的节点，并设置它们为折叠状态
     headingTree.forEach((node) => {
       newCollapsedNodes[node.id] = true
+      // 同时遍历它们的子节点，并设置为折叠状态
       node.children.forEach((child) => {
         newCollapsedNodes[child.id] = true
       })
     })
+    // 更新存储折叠状态的对象
     setCollapsedNodes(newCollapsedNodes)
   }
+
   const expandAll = () => {
     const newCollapsedNodes = {}
     headingTree.forEach((node) => {
@@ -156,7 +179,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                         e.preventDefault()
                         handleHeadingClick(node, href)
                       }}
-                      className="text-gray-600 hover:text-blue-500 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                      className="text-gray-600 hover:text-blue-500 flex-1 overflow-hidden text- whitespace-nowrap">
                       {node.text}
                     </a>
                     {node.children.length > 0 && (
@@ -172,7 +195,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                     )}
                   </div>
                   {node.children.length > 0 && !collapsedNodes[node.id] && (
-                    <ul className="ml-9">
+                    <ul className="ml-4">
                       {node.children.map((child) => (
                         <li key={child.id} className="mb-2 group">
                           <div className=" flex items-center">
