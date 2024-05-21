@@ -1,13 +1,11 @@
-import { hrtime } from "process"
 import cssText from "data-text:~style.css"
-import { Ellipsis, Minus, Plus, SunDim } from "lucide-react"
-import React, { useState } from "react"
-import Draggable, {
-  type DraggableData,
-  type DraggableEvent
-} from "react-draggable"
+import { Ellipsis, Minus, Plus, SunDim, X } from "lucide-react"
+import type { PlasmoGetOverlayAnchor } from "plasmo"
+import React, { useState, type ElementRef } from "react"
+import Draggable from "react-draggable"
 
 import type { Heading } from "../types"
+import { SettingPopover } from "./popover"
 
 interface HeadingTreeProps {
   headings: Heading[] | undefined
@@ -166,7 +164,66 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
               </button>
 
               <SunDim className="mx-1 h-4 w-4" />
-              <Ellipsis className=" mx-1 h-4 w-4" />
+              {/* <Popover>
+                <PopoverTrigger>
+                  <Button variant={"ghost"} className=" h-auto w-auto p-2">
+                    <Ellipsis className=" mx-1 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <h4 className="font-medium leading-none">Dimensions</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Set the dimensions for the layer.
+                      </p>
+                    </div>
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="width">Width</Label>
+                        <Input
+                          id="width"
+                          defaultValue="100%"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="maxWidth">Max. width</Label>
+                        <Input
+                          id="maxWidth"
+                          defaultValue="300px"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="height">Height</Label>
+                        <Input
+                          id="height"
+                          defaultValue="25px"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="maxHeight">Max. height</Label>
+                        <Input
+                          id="maxHeight"
+                          defaultValue="none"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <PopoverClose>
+                    <Button
+                      className=" h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
+                      variant={"ghost"}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </PopoverClose>
+                </PopoverContent>
+              </Popover> */}
+              <SettingPopover />
+              {/* <SheetDemo /> */}
             </div>
             <ul className="space-y-2 ml-2">
               {headingTree.map((node) => (
