@@ -1,4 +1,5 @@
 // import cssText from "data-text:~/contents/plasmo-overlay.css"
+import { injectMainStyles } from "@/lib/utils"
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
 import React, { useState } from "react"
@@ -42,6 +43,10 @@ const TocPage = () => {
     }
     setLoading(false)
   })
+
+  //解决样式覆盖问题
+  //解决shadcn-ui问题 2024.5.23
+  injectMainStyles(cssText)
 
   return (
     <div>

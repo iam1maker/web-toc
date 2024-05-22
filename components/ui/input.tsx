@@ -1,12 +1,5 @@
 import { cn } from "@/lib/utils"
-import cssText from "data-text:~style.css"
 import * as React from "react"
-
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
-}
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}

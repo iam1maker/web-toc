@@ -1,14 +1,6 @@
 import { cn } from "@/lib/utils"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
-import cssText from "data-text:~style.css"
-import type { PlasmoGetOverlayAnchor } from "plasmo"
 import * as React from "react"
-
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
-}
 
 const Popover = PopoverPrimitive.Root
 

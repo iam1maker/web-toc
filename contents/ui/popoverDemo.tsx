@@ -3,19 +3,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   Popover,
-  PopoverClose,
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import cssText from "data-text:~style.css"
 import { Ellipsis, X } from "lucide-react"
-import type { PlasmoGetOverlayAnchor } from "plasmo"
-
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
-}
 
 export const SettingPopover = () => {
   return (

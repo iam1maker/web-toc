@@ -1,15 +1,8 @@
 import { cn } from "@/lib/utils"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
-import cssText from "data-text:~style.css"
 import { X } from "lucide-react"
 import * as React from "react"
-
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
-}
 
 const Sheet = SheetPrimitive.Root
 
