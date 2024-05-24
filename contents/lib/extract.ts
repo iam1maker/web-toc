@@ -220,7 +220,7 @@ const HEADING_TAG_WEIGHTS = {
  * @returns Heading[] 返回一个包含标题信息的数组，每个标题包括DOM元素、文本内容、级别、唯一ID和锚点。
  */
 export const extractHeadings = (articleDom: HTMLElement): Heading[] => {
-  console.log("articleDom", articleDom)
+  // console.log("articleDom", articleDom)
   // 定义可见性的判断函数
   const isVisible = (elem: HTMLElement) => elem.offsetHeight !== 0
 

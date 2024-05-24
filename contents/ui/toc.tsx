@@ -29,7 +29,18 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   article,
   loading
 }) => {
+  const [activeDrags, setActiveDrags] = useState(0)
+  const [activeHeading, setActiveHeading] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!loading && headings && headings.length > 0) {
+      setActiveHeading(headings[0].id)
+    }
+  }, [headings])
+
   const handleHeadingClick = (heading: Heading, href: string) => {
+    setActiveHeading(heading.id)
+
     let targetElement = article?.querySelector(`#${heading.anchor}`)
 
     if (!targetElement && heading.text) {
@@ -44,7 +55,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: "smooth" })
     }
-    setActiveHeading(heading.id)
   }
 
   const buildNestedHeadingTree = (headings: Heading[]): HeadingNode[] => {
@@ -76,8 +86,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
 
   // 在HeadingTree组件中
   const headingTree = buildNestedHeadingTree(headings || [])
-  const [activeDrags, setActiveDrags] = useState(0)
-  const [activeHeading, setActiveHeading] = useState<number | null>(null)
 
   /**
    * 使用状态管理器useState初始化一个记录折叠节点的对象。
@@ -142,12 +150,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
     setCollapsedNodes(newCollapsedNodes)
   }
 
-  useEffect(() => {
-    if (headingTree.length > 0) {
-      setActiveHeading(headingTree[0].id)
-    }
-  })
-
   if (!article) {
     return <div>No article found</div>
   }
@@ -164,11 +166,8 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                 e.preventDefault()
                 handleHeadingClick(node, href)
               }}
-              className={`flex-1 overflow-hidden text-ellipsis whitespace-nowrap ${
-                activeHeading === node.id
-                  ? " text-blue-400"
-                  : " text-gray-600 hover:text-blue-500"
-              }`}>
+              style={{ color: activeHeading === node.id ? "blue" : "" }}
+              className="text-gray-600 hover:text-blue-700 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
               {node.text}
             </a>
             {node.children.length > 0 && (
