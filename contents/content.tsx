@@ -39,7 +39,7 @@ const TocPage = () => {
         console.log("headings:", headings)
 
         // 执行其他逻辑...
-      }, 1000) // 延迟500毫秒
+      }, 1000) // 延迟1000毫秒
     }
     setLoading(false)
   })
