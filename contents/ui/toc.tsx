@@ -198,7 +198,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
         <div className="text-center mx-auto">loading...</div>
       ) : (
         <Draggable handle="strong" {...draggableHandlers}>
-          <div className="group fixed right-0 top-0 mt-20 mr-8 max-w-xs bg-white p-4 rounded-lg shadow-lg">
+          <div className=" resize-none hover:resize overflow-auto group fixed max-w-md bg-white p-4 rounded-lg shadow-lg">
             <strong className="cursor-move pb-1">
               <div>Toc</div>
             </strong>

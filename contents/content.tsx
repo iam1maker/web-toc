@@ -1,4 +1,3 @@
-// import cssText from "data-text:~/contents/plasmo-overlay.css"
 import { injectMainStyles } from "@/lib/utils"
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
@@ -36,7 +35,7 @@ const TocPage = () => {
         const headings = result && extractHeadings(result)
         setArticle(result)
         setHeadings(headings)
-        console.log("headings:", headings)
+        // console.log("headings:", headings)
 
         // 执行其他逻辑...
       }, 1000) // 延迟1000毫秒
