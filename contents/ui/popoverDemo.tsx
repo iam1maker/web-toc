@@ -1,13 +1,15 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+// import * as PopoverPrimitive from "@radix-ui/react-popover"
+// import {Popover,PopoverContent,PopoverClose,PopoverTrigger}from "@radix-ui/react-popover"
+import { Ellipsis, X } from "lucide-react"
+
+import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
 import {
   Popover,
-  PopoverClose,
   PopoverContent,
   PopoverTrigger
-} from "@/components/ui/popover"
-import { Ellipsis, X } from "lucide-react"
+} from "~/components/ui/popover"
 
 export const SettingPopover = () => {
   return (
@@ -18,13 +20,13 @@ export const SettingPopover = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className=" w-80" side={"right"} align={"start"}>
-        <PopoverClose asChild>
+        {/* <PopoverClose asChild>
           <Button
             className=" h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600 bg-white"
             variant={"ghost"}>
             <X className="h-4 w-4" />
           </Button>
-        </PopoverClose>
+        </PopoverClose> */}
 
         <div className="grid gap-4">
           <div className="space-y-2">

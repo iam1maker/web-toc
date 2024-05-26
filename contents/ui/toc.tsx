@@ -1,11 +1,19 @@
 import cssText from "data-text:~style.css"
-import { Minus, Plus, SunDim } from "lucide-react"
-import type { PlasmoGetOverlayAnchor } from "plasmo"
-import React, { useEffect, useState, type ElementRef } from "react"
+import { Ellipsis, Minus, Plus, SunDim, X } from "lucide-react"
+import React, { useEffect, useState } from "react"
 import Draggable from "react-draggable"
 
+import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "~/components/ui/popover"
+import { injectMainStyles } from "~/lib/utils"
+
 import type { Heading } from "../types"
-import { SettingPopover } from "./popoverDemo"
 
 interface HeadingTreeProps {
   headings: Heading[] | undefined
@@ -18,17 +26,13 @@ interface HeadingNode extends Heading {
   children: HeadingNode[]
 }
 
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
-}
-
 export const HeadingTree: React.FC<HeadingTreeProps> = ({
   headings,
   article,
   loading
 }) => {
+  injectMainStyles(cssText)
+
   const [activeDrags, setActiveDrags] = useState(0)
   const [activeHeading, setActiveHeading] = useState<number | null>(null)
 
@@ -209,9 +213,69 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
               <button onClick={collapseAll} className="mx-1 h-4 w-4">
                 <Minus className="mx-1 h-4 w-4" />
               </button>
-
               <SunDim className="mx-1 h-4 w-4" />
-              <SettingPopover />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant={"ghost"} className=" h-auto w-auto p-2">
+                    <Ellipsis className=" mx-1 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className=" w-80"
+                  side={"right"}
+                  align={"start"}>
+                  {/* <PopoverClose asChild>
+          <Button
+            className=" h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600 bg-white"
+            variant={"ghost"}>
+            <X className="h-4 w-4" />
+          </Button>
+        </PopoverClose> */}
+
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <h4 className="font-medium leading-none">Dimensions</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Set the dimensions for the layer.
+                      </p>
+                    </div>
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="width">Width</Label>
+                        <Input
+                          id="width"
+                          defaultValue="100%"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="maxWidth">Max. width</Label>
+                        <Input
+                          id="maxWidth"
+                          defaultValue="300px"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="height">Height</Label>
+                        <Input
+                          id="height"
+                          defaultValue="25px"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 items-center gap-4">
+                        <Label htmlFor="maxHeight">Max. height</Label>
+                        <Input
+                          id="maxHeight"
+                          defaultValue="none"
+                          className="col-span-2 h-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
             {renderTree(headingTree)}
           </div>
