@@ -89,7 +89,7 @@ const getElemsCommonLeft = (elems: HTMLElement[]): number | undefined => {
   const count = elems.length
 
   // 判断是否足够多的元素对齐，这里认为少于30%的元素对齐不算对齐
-  const isAligned = Object.keys(lefts).length <= Math.ceil(0.3 * count)
+  const isAligned = Object.keys(lefts).length <= Math.ceil(0.1 * count)
   // 如果没有足够的元素对齐，则返回undefined
   if (!isAligned) {
     return undefined

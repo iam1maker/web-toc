@@ -26,6 +26,7 @@ interface HeadingNode extends Heading {
   children: HeadingNode[]
 }
 
+//拆分为各个不同的组件
 export const HeadingTree: React.FC<HeadingTreeProps> = ({
   headings,
   article,
@@ -39,14 +40,29 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   useEffect(() => {
     if (!loading && headings && headings.length > 0) {
       setActiveHeading(headings[0].id)
+      const allCollapsed = headings.reduce((collapsedState, heading) => {
+        collapsedState[heading.id] = true
+        return collapsedState
+      }, {})
+      setCollapsedNodes(allCollapsed)
     }
   }, [headings])
 
+  /**
+   * 处理标题点击事件的函数。
+   * 设置当前活动标题，并根据标题滚动到相应位置。
+   *
+   * @param heading 表示被点击的标题对象，包含标题文本、id和锚点等信息。
+   * @param href 表示标题的链接，用于设置活动标题的链接。
+   */
   const handleHeadingClick = (heading: Heading, href: string) => {
+    // 设置当前活动的标题id
     setActiveHeading(heading.id)
 
+    // 尝试通过id直接获取目标元素
     let targetElement = article?.querySelector(`#${heading.anchor}`)
 
+    // 如果无法通过id找到目标元素，则通过文本内容在所有相同标签名的元素中查找
     if (!targetElement && heading.text) {
       const elements = article?.querySelectorAll(heading.dom.localName)
       elements.forEach((e) => {
@@ -56,8 +72,18 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
       })
     }
 
+    // 如果找到目标元素，则计算位置并平滑滚动到该元素
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" })
+      const offset = -80 // 设置滚动偏移量，用于调整目标元素顶部与浏览器视口顶部的距离
+      const elementPosition =
+        targetElement.getBoundingClientRect().top + window.pageYOffset + offset
+
+      window.scroll({
+        top: elementPosition,
+        behavior: "smooth" // 平滑滚动行为
+      })
+      // 注释掉的代码是另一种实现滚动的备用方法
+      // targetElement.scrollIntoView({ behavior: "smooth" })
     }
   }
 
@@ -159,7 +185,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
   }
 
   const renderTree = (nodes: HeadingNode[]): React.ReactNode => (
-    <ul className="space-y-2 ml-2">
+    <ul className="space-y-2 ml-2 mt-2">
       {nodes.map((node) => (
         <li key={node.id} className="mb-2 group">
           <div className="flex items-center hover:bg-red-200">
