@@ -228,7 +228,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
         <div className="text-center mx-auto">loading...</div>
       ) : (
         <Draggable handle="strong" {...draggableHandlers}>
-          <div className=" resize-none hover:resize overflow-auto group fixed max-w-md bg-white p-4 rounded-lg shadow-lg">
+          <div className=" resize-none hover:resize overflow-auto group fixed size-80 bg-white p-4 rounded-lg shadow-lg">
             <strong className="cursor-move pb-1">
               <div>Toc</div>
             </strong>
@@ -250,14 +250,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                   className=" w-80"
                   side={"right"}
                   align={"start"}>
-                  {/* <PopoverClose asChild>
-          <Button
-            className=" h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600 bg-white"
-            variant={"ghost"}>
-            <X className="h-4 w-4" />
-          </Button>
-        </PopoverClose> */}
-
                   <div className="grid gap-4">
                     <div className="space-y-2">
                       <h4 className="font-medium leading-none">Dimensions</h4>
