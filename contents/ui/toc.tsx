@@ -82,8 +82,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
         top: elementPosition,
         behavior: "smooth" // 平滑滚动行为
       })
-      // 注释掉的代码是另一种实现滚动的备用方法
-      // targetElement.scrollIntoView({ behavior: "smooth" })
     }
   }
 
