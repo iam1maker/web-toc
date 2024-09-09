@@ -7,12 +7,12 @@ import exp from "constants"
  * 导入clsx模块，用于处理类名的组合。
  * @remarks 这使得在 TypeScript 中更加方便地处理动态类名，提高代码的可读性和可维护性。
  */
-import { clsx, type ClassValue } from "clsx"
+import {clsx, type ClassValue} from "clsx"
 /**
  * 导入tailwind-merge模块，用于合并Tailwind CSS类。
  * @remarks 这有助于在使用Tailwind CSS时动态生成类名，以实现更灵活的样式配置。
  */
-import { twMerge } from "tailwind-merge"
+import {twMerge} from "tailwind-merge"
 
 /**
  * 创建一个函数，用于合并类名。
@@ -21,7 +21,7 @@ import { twMerge } from "tailwind-merge"
  * @remarks 此函数封装了clsx和tailwind-merge的功能，提供了一种简洁的方式来处理和合并类名。
  */
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs))
 }
 
 /**
@@ -30,7 +30,7 @@ export function cn(...inputs: ClassValue[]) {
  * @remarks 此函数允许在运行时动态修改页面的样式，增加了灵活性和动态性。
  */
 export const injectMainStyles = (cssText: string) => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  document.head.appendChild(style)
+    const style = document.createElement("style")
+    style.textContent = cssText
+    document.head.appendChild(style)
 }

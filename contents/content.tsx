@@ -1,7 +1,7 @@
 // import { injectMainStyles } from "@/lib/utils"
 import cssText from "data-text:~style.css"
 import type {PlasmoCSConfig} from "plasmo"
-import React, {useEffect, useState} from "react"
+import React, {useState} from "react"
 
 import {useMessage} from "@plasmohq/messaging/hook"
 
@@ -45,7 +45,6 @@ const PlasmoOverlay = () => {
 
     //解决样式覆盖问题
     //解决shadcn-ui问题 2024.5.23
-
     return (
         <div>
             <HeadingTree headings={headings} article={article} loading={loading}/>

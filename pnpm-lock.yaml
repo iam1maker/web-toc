@@ -36,7 +36,7 @@ importers:
         specifier: 0.86.2
         version: 0.86.2(@swc/core@1.4.17(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)(lodash@4.17.21)(postcss@8.4.38)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(srcset@4.0.0)
       react:
-        specifier: 18.2.0
+        specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: 18.2.0
@@ -79,7 +79,7 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
       typescript:
-        specifier: 5.3.3
+        specifier: ^5.3.3
         version: 5.3.3
 
 packages:

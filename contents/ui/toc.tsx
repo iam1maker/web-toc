@@ -58,10 +58,8 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
     const handleHeadingClick = (heading: Heading, href: string) => {
         // 设置当前活动的标题id
         setActiveHeading(heading.id)
-
         // 尝试通过id直接获取目标元素
         let targetElement = article?.querySelector(`#${heading.anchor}`)
-
         // 如果无法通过id找到目标元素，则通过文本内容在所有相同标签名的元素中查找
         if (!targetElement && heading.text) {
             const elements = article?.querySelectorAll(heading.dom.localName)
@@ -71,7 +69,6 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                 }
             })
         }
-
         // 如果找到目标元素，则计算位置并平滑滚动到该元素
         if (targetElement) {
             const offset = -80 // 设置滚动偏移量，用于调整目标元素顶部与浏览器视口顶部的距离
@@ -243,6 +240,7 @@ export const HeadingTree: React.FC<HeadingTreeProps> = ({
                                         <Ellipsis className=" mx-1 h-4 w-4"/>
                                     </Button>
                                 </PopoverTrigger>
+                                {/* 优化*/}
                                 <PopoverContent
                                     className=" w-80"
                                     side={"right"}
